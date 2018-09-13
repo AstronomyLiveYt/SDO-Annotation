@@ -48,7 +48,6 @@ while ret is True:
         filename = 'temp.png'
         cv2.imwrite(filename, gray)
         text = pytesseract.image_to_string(Image.open(filename))
-        #os.remove(filename)
         print(text, end='\r')
         observer.date = (str(text))
         sun = ephem.Sun(observer)
@@ -65,8 +64,6 @@ while ret is True:
         sunsize = int(((sun.radius)*180/math.pi)*1506)
         moonsize = int(((moon.radius)*180/math.pi)*1506)
         posangle = position_angle(sunlon, sunlat, moonlon, moonlat)
-        #moony = int(240-(math.sin((posangle))*(separation*180/math.pi)*500))
-        #moonx = int((math.cos((posangle))*(separation*180/math.pi)*500)+320)
         moonyangle = (moonlat - sunlat)
         moonxangle = (moonlon - sunlon)*math.cos(moonyangle)
         moonx = int(512-(moonxangle*180/math.pi)*1506)
