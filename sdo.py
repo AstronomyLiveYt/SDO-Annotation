@@ -52,31 +52,34 @@ while ret is True:
         observer.date = (str(text))
         sun = ephem.Sun(observer)
         sdo = ephem.readtle(lines[0],lines[1],lines[2])
-        sdo.compute(observer)
-        observer.lat = sdo.sublat
-        observer.lon = sdo.sublong
-        observer.elevation = sdo.elevation
-        moon = ephem.Moon(observer)
-        sun = ephem.Sun(observer)
-        moonlon, moonlat, E = equatorial_to_ecliptic(moon.ra, moon.dec, observer)
-        sunlon, sunlat, E = equatorial_to_ecliptic(sun.ra, sun.dec, observer)
-        separation = ephem.separation((sunlon, sunlat),(moonlon,moonlat))
-        sunsize = int(((sun.radius)*180/math.pi)*1506)
-        moonsize = int(((moon.radius)*180/math.pi)*1506)
-        posangle = position_angle(sunlon, sunlat, moonlon, moonlat)
-        moonyangle = (moonlat - sunlat)
-        moonxangle = (moonlon - sunlon)*math.cos(moonyangle)
-        moonx = int(512-(moonxangle*180/math.pi)*1506)
-        moony = int(512-(moonyangle*180/math.pi)*1506)
-        img = vidframe
-        cv2.circle(img,(512,512), sunsize, (0,0,255), 2)
-        cv2.putText(img,'Sun',(460,512), font, 2,(0,0,255),2,cv2.LINE_AA)
-        cv2.circle(img, (moonx,moony), moonsize, (255,0,0), 2)
-        cv2.putText(img,'Moon',((moonx-74),moony), font, 2,(255,0,0),2,cv2.LINE_AA)
-        cv2.putText(img,str(observer.date),(0,50), font, 1,(0,0,255),2,cv2.LINE_AA)
-        cv2.imshow('image', img)
-        out.write(img)
-        cv2.waitKey(1)
+        try:
+            sdo.compute(observer)
+            observer.lat = sdo.sublat
+            observer.lon = sdo.sublong
+            observer.elevation = sdo.elevation
+            moon = ephem.Moon(observer)
+            sun = ephem.Sun(observer)
+            moonlon, moonlat, E = equatorial_to_ecliptic(moon.ra, moon.dec, observer)
+            sunlon, sunlat, E = equatorial_to_ecliptic(sun.ra, sun.dec, observer)
+            separation = ephem.separation((sunlon, sunlat),(moonlon,moonlat))
+            sunsize = int(((sun.radius)*180/math.pi)*1506)
+            moonsize = int(((moon.radius)*180/math.pi)*1506)
+            posangle = position_angle(sunlon, sunlat, moonlon, moonlat)
+            moonyangle = (moonlat - sunlat)
+            moonxangle = (moonlon - sunlon)*math.cos(moonyangle)
+            moonx = int(512-(moonxangle*180/math.pi)*1506)
+            moony = int(512-(moonyangle*180/math.pi)*1506)
+            img = vidframe
+            cv2.circle(img,(512,512), sunsize, (0,0,255), 2)
+            cv2.putText(img,'Sun',(460,512), font, 2,(0,0,255),2,cv2.LINE_AA)
+            cv2.circle(img, (moonx,moony), moonsize, (255,0,0), 2)
+            cv2.putText(img,'Moon',((moonx-74),moony), font, 2,(255,0,0),2,cv2.LINE_AA)
+            cv2.putText(img,str(observer.date),(0,50), font, 1,(0,0,255),2,cv2.LINE_AA)
+            cv2.imshow('image', img)
+            out.write(img)
+            cv2.waitKey(1)
+        except:
+            print('TLE epoch is too far out from detected image date', end='\r')
 out.release()
 exit()
 
