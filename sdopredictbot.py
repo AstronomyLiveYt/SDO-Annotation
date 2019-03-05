@@ -128,7 +128,7 @@ def predict_positions(start, end, d, observer, line1, line2, line3):
         moonxl.append(moonx)
         moonyl.append(moony)
         earthxl.append(earthx)
-        earthyl.append(earthx)
+        earthyl.append(earthy)
         moonsizel.append(moon.radius)
         sunsizel.append(sun.radius)
         earthsizel.append(earthappradius)
